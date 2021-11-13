@@ -1,0 +1,61 @@
+\textbf{Problem 2.}
+
+We consider the partial differential equation:
+\begin{align*}
+    u_t + \alpha u_x - \beta u_{xxx} + \gamma u_{xxxx} = 0
+\end{align*}
+
+along a periodic domain $[0,2\pi]$ with boundary conditions:
+\begin{align*}
+    u(0) = u(2\pi), \quad u_x(0) = u_x(2\pi), \quad
+    u_{xx}(0) = u_{xx}(2\pi), \quad u_{xxx}(0) = u_{xxx}(2\pi)
+\end{align*}
+
+with the following initial conditions:
+\begin{align*}
+    u(x,0) = \cos^2x - \sin^2x
+\end{align*}
+
+Because the periodic is doubly periodic, $u(x,t)$ must take on the form:
+\begin{align*}
+    u(x,t) = \sum_{k=-\infty}^\infty u_k(t) \cdot e^{ikx}
+\end{align*}
+
+And now, substituting the above into the initial PDE and eliminating $e^{ikx}$, we get
+\begin{gather*}
+    \frac{\partial u_k}{\partial t} + \alpha iku_k + \beta ik^3u_k + \gamma k^4u_k = 0 \\
+    \frac{\partial u_k}{\partial t} + u_k(\alpha ik + \beta ik^3 + \gamma k^4) = 0
+\end{gather*}
+
+Doing the separation of variables, we then obtain
+\begin{align*}
+    \frac{\dd{u_k}}{u_k}
+    &= - (\alpha ik + \beta ik^3 + \gamma k^4) \dd{t} \\
+    \ln \abs{u_k} &= - (\alpha ik + \beta ik^3 + \gamma k^4)t + c \\
+    \therefore u_k
+    &= A e^{- (\alpha ik + \beta ik^3 + \gamma k^4)t}
+\end{align*}
+
+So the final form of $u(x,t)$ is
+\begin{align*}
+    u(x,t) = \sum_{k=-\infty}^\infty
+    A_k e^{- (\alpha ik + \beta ik^3 + \gamma k^4)t} \cdot e^{ikx}
+\end{align*}
+
+Given the initial conditions, we see that
+\begin{align*}
+    u(x,t) &= \sum_{k=-\infty}^\infty A_k e^{ikx}
+    = \cos^2x - \sin^2x \\
+    &= \left( \frac{e^{ix} + e^{-ix}}{2} \right)^2
+    - \left( \frac{e^{ix} - e^{-ix}}{2i} \right)^2
+    = \frac{e^{2ix} + 2 + e^{-2ix}}{4}
+    + \frac{e^{2ix} - 2 + e^{-2ix}}{4} \\
+    &= \frac{1}{2}(e^{2ix}+e^{-2ix})
+\end{align*}
+
+Therefore we see that $A_{-2} = A_2 = 1/2$ and all other $A_k = 0$, such that
+\begin{align*}
+    u(x,t) = \frac{1}{2} \left( 
+    e^{- (2\alpha i + 8\beta i + 16\gamma)t} \cdot e^{2ix}
+    + e^{(2\alpha i + 8\beta i - 16\gamma)t} \cdot e^{-2ix} \right)
+\end{align*}

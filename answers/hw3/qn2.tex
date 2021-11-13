@@ -1,0 +1,83 @@
+\textbf{Problem 2.}
+
+We consider the Robin problem:
+\begin{alignat}{2}
+    -\nabla^2u &= f \qquad&& \text{in $\Omega$} \\
+    u &= 0 \qquad&& \text{on $\Gamma^D$} \\
+    -\frac{\partial{u}}{\partial{n}} &= h_cu > 0 \qquad&& \text{on $\Gamma^R$ \quad ($\overline{\Gamma} = \overline{\Gamma^D} \cup \overline{\Gamma^R}$)}
+\end{alignat}
+
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=0mm]
+    
+    \item We wish to find the function $J$ (and hence $a$ and $l$) such that
+    \begin{align*}
+        u = \arg\min_{w\in X}J(w) = \frac{1}{2}a(w,w) - l(w)
+    \end{align*}
+    
+    and
+    \begin{align*}
+        a(u,v) = l(v),\qquad \forall v\in X
+    \end{align*}
+    
+    where $X = \{ v\in H^1(\Omega) \mid v|_{\Gamma^D} = 0 \}$.
+    
+    First, we multiply (1) by $v$, to obtain
+    \begin{align}
+        -v\nabla^2u = fv
+    \end{align}
+    
+    Recognizing the fact that $\nabla\cdot(v\nabla u) = v\nabla^2u + \nabla v\cdot\nabla u$, we have
+    \begin{align}
+        \nabla v \cdot \nabla u - \nabla \cdot (v\nabla u) &= fv \nonumber \\
+        \therefore \int_\Omega \nabla v \cdot \nabla u \dd{A}
+        &= \int_\Omega \nabla \cdot (v\nabla u) \dd{A} + \int_\Omega fv \dd{A}
+    \end{align}
+    
+    By Gauss' Theorem that states $\int_\Omega \nabla^2 u\dd{A} = \int_\Gamma \nabla u \cdot \hat{n} \dd{S}$, Eq. (5) then becomes:
+    \begin{align}
+        \int_\Omega \nabla v \cdot \nabla u \dd{A}
+        &= \int_\Omega \nabla \cdot (v\nabla u) \dd{A} + \int_\Omega fv \dd{A} \nonumber \\
+        &= \int_\Gamma \hat{n} \cdot (v\nabla u) \dd{S} + \int_\Omega fv \dd{A}
+        =  \int_\Gamma v\nabla u \cdot \hat{n} \dd{S} + \int_\Omega fv \dd{A} \nonumber \\
+        &= \int_{\Gamma^D} v\nabla u \cdot \hat{n} \dd{S}
+        + \int_{\Gamma^R} v\nabla u \cdot \hat{n} \dd{S} + \int_\Omega fv \dd{A}
+    \end{align}
+    
+    From Eq. (2) and substituting in Eq. (3) we see simplify this into
+    \begin{align}
+        \int_\Omega \nabla v \cdot \nabla u \dd{A}
+        &= \int_{\Gamma^R} v\nabla u \cdot \hat{n} \dd{S} + \int_\Omega fv \dd{A} \nonumber \\
+        &= \int_{\Gamma^R} -h_cuv \dd{S} + \int_\Omega fv \dd{A} \nonumber \\
+        \int_\Omega \nabla v \cdot \nabla u \dd{A} + 
+        \int_{\Gamma^R} h_cuv \dd{S} &= \int_\Omega fv \dd{A}
+    \end{align}
+    
+    whcih is the weak form of the Robin problem, where
+    \begin{align}
+        a(w,w) &= \int_\Omega \nabla v \cdot \nabla u \dd{A} + \int_{\Gamma^R} h_cuv \dd{S} \\
+        l(w) &= \int_\Omega fv \dd{A}
+    \end{align}
+    
+    Now, we substitute (8) and (9) to find $J$
+    \begin{align}
+        J &= \frac{1}{2}a(w,w) - l(w) \nonumber \\
+        &= \frac{1}{2} \left( \int_\Omega \nabla v \cdot \nabla u \dd{A} + \int_{\Gamma^R} h_cuv \dd{S} \right)
+        - \int_\Omega fv \dd{A}
+    \end{align}
+    
+    The corresponding minimization statement is therefore, we need to find $u$ such that
+    \begin{align}
+        u = \arg\min_{w\in X}
+        \left[ \frac{1}{2} \left( \int_\Omega \nabla v \cdot \nabla u \dd{A} + \int_{\Gamma^R} h_cuv \dd{S} \right)
+        - \int_\Omega fv \dd{A} \right]
+    \end{align}
+    
+    And since the largest derivative of $u$ is 1st-order, we have that $X = \{ v\in H^1(\Omega) \mid v|_{\Gamma^D} = 0 \}$.
+    
+    \item We have that
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $u = 0 \> \text{on $\Gamma^D$}$ is an \textit{essential} boundary condition
+        \item $-\partial_nu = h_cu \> \text{on $\Gamma^R$}$ is a \textit{natural} boundary condition
+    \end{itemize}
+    
+\end{enumerate}

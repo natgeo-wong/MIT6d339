@@ -1,0 +1,70 @@
+\textbf{Problem 3.}
+
+We consider the fourth-order 1-D problem
+\begin{alignat}{2}
+    u_{xxxx} &= f \qquad&& \text{in $\Omega = (0,1)$} \\
+    u(0) = u(1) &= 0 \\
+    u_x(0) = u_x(1) &= 0
+\end{alignat}
+
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=0mm]
+
+    \item We wish to find an SPD bilinear form $a$ over $X$ and a linear form $l$ such that
+    \begin{gather*}
+        u = \arg\min_{w\in X}J(w) = \frac{1}{2}a(w,w) - l(w) \\
+        \Updownarrow \\
+        a(u,v) = l(v), \qquad \forall\>v\in X
+    \end{gather*}
+    
+    where $w\in X$ are sufficiently smooth and satisfy $w(0) = w(1) = w_x(0) = w_x(1) = 0$.
+    
+    We start by multiplying the strong form by $v$ and integrating by parts with the indefinite integral, which gives us
+    \begin{align}
+        \int u_{xxxx} v \dd{x} &= u_{xxx}v - \int u_{xxx}v_x \nonumber \\
+        &= u_{xxx}v - \left( u_{xx}v_x - \int u_{xx}v_{xx} \dd{x} \right) = \int fv \dd{x}
+    \end{align}
+    
+    Converting to a definite integral and applying the boundary conditions to $v$ such that $v(0) = v(1) = v_x(0) = v_x(1) = 0$,
+    \begin{align}
+        \int_0^1 u_{xxxx} v \dd{x}
+        &= \left[ u_{xxx}v - \left( u_{xx}v_x - \int u_{xx}v_{xx} \dd{x} \right) \right]_0^1 \nonumber \\
+        &= \int_0^1 u_{xx}v_{xx} \dd{x} + [u_{xxx}v-u_{xx}v_x]_0^1 \nonumber \\
+        &= \int_0^1 u_{xx}v_{xx} \dd{x} = \int_0^1 fv \dd{x}
+    \end{align}
+    
+    which is the weak form, with the SPD bilinear form $a$ and linear form $l$ being
+    \begin{align}
+        a(u,v) = \int u_{xx}v_{xx} \dd{x}, \qquad l(v) = \int fv \dd{x}
+    \end{align}
+    
+    \item The mimization form is given by
+    \begin{align}
+        u = \arg\min_{w\in X}\left( \frac{1}{2}\int w_{xx}^2 \dd{x} - \int fw \dd{x} \right)
+    \end{align}
+    
+    We define $X$ such that $w_{xx}$ and $w$ are valid in the weak form, which means:
+    \begin{align}
+        X = \{ v\in H^2(\Omega) \mid v(0) = v(1) = v_x(0) = v_x(1) = 0, \> x \in (0,1) \}
+    \end{align}
+    
+    So we see that m = 2
+    
+    \item We wish to show that 
+    \begin{align*}
+        \abs{l(v)} \leq C\norm{v}_X \equiv C\norm{v}_{H^2(\Omega)}, \qquad \forall \> v\in X
+    \end{align*}
+    
+    \begin{proof}
+        We have that in this space, $\norm{v}_{H^2(\Omega)} = \sqrt{\int_\Omega v_xx^2 + v_x^2 + v^2}$.  By the boundary conditions we have that $v_x^2 = v^2 = 0$ such that
+        \begin{align*}
+            \abs{l(v)} &= v_x(\tfrac{1}{2}) = v_x(\tfrac{1}{2}) - v(0) = \int_0^{1/2} v_{xx} \dd{x} \\
+            &= \int_0^{1/2} 1 \cdot v_{xx} \dd{x} \\
+            &\leq \left( \int_0^{1/2} v_{xx} \dd{x}\right)^{1/2}
+            \cdot \left( \int_0^{1/2} 1 \dd{x} \right)^{1/2}
+            = \frac{1}{\sqrt{2}} \norm{v}_{H^2(\Omega)}
+        \end{align*}
+        
+        So the function is admissible.
+    \end{proof}
+    
+\end{enumerate}

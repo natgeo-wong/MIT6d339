@@ -1,0 +1,153 @@
+\textbf{Problem 1.}
+
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=0mm]
+    
+    \item Find the solution of the following 1st-order PDE:
+    \begin{gather*}
+        u_t + tu_x = 0,\quad x\in\mathbb{R},\> t>0 \\
+        u(x,0) = e^x, \quad x\in\mathbb{R}
+    \end{gather*}
+    
+    This equation is of the form
+    \begin{align*}
+        u_t + p(x,t) u_x = 0
+    \end{align*}
+    
+    whereby the general solution is of the form
+    \begin{align*}
+        u(x,t) = f(\phi(x,t))
+    \end{align*}
+    
+    where $\phi(x,t)=C$ is the general solution to the ODE $\dfrac{\dd{x}}{\dd{t}} = p(x,t)$.  Given that $p(x,t) = t$ in this problem, we see that the general solution to $\phi(x,t)$ is
+    \begin{align*}
+        x - \frac{1}{2}t^2 = C
+    \end{align*}
+    
+    Whereby $u$ is constant along this characteristic curve $\phi(x,t) = x - \dfrac{1}{2}t^2$.
+    
+    The initial condition, given by $u(x,0) = e^x$, therefore implies that the solution to the 1st-order PDE is
+    \begin{align*}
+        u(x,0) = f(x) = e^x \Rightarrow u(x,t) = f\left(x-\frac{1}{2}t^2\right) = e^{x-\frac{1}{2}t^2}
+    \end{align*}
+    
+    \item Find the solution of the following 1st-order PDE:
+    \begin{gather*}
+        u_t + 2u_x - u = 0,\quad x\in\mathbb{R},\> t>0 \\
+        u(x,0) = x^2, \quad x\in\mathbb{R}
+    \end{gather*}
+    
+    We perform a linear change of variables:
+    \begin{align*}
+        \alpha &= ax + bt \\
+        \beta  &= cx + dt 
+    \end{align*}
+    
+    And we see that
+    \begin{align*}
+        \frac{\partial{u}}{\partial{x}} 
+        &= \frac{\partial{u}}{\partial{\alpha}} \frac{\partial{\alpha}}{\partial{x}}
+        +  \frac{\partial{u}}{\partial{\beta}}  \frac{\partial{\beta}}{\partial{x}}
+        =  a\frac{\partial{u}}{\partial{\alpha}} + c\frac{\partial{u}}{\partial{\beta}} \\
+        \frac{\partial{u}}{\partial{t}} 
+        &= \frac{\partial{u}}{\partial{\alpha}} \frac{\partial{\alpha}}{\partial{t}}
+        +  \frac{\partial{u}}{\partial{\beta}}  \frac{\partial{\beta}}{\partial{t}}
+        =  b\frac{\partial{u}}{\partial{\alpha}} + d\frac{\partial{u}}{\partial{\beta}} \\
+    \end{align*}
+    
+    Therefore
+    \begin{align*}
+        u_t + 2u_x = (b + 2a)u_\alpha + (d+2c)u_\beta
+    \end{align*}
+    
+    And by choosing $b = 1$, $a=0$, $d = -2c = -2 \Rightarrow c = 1$, we obtain $u_\alpha = u$, and therefore, we have that
+    \begin{align*}
+        \ln u = \alpha + f(\beta) = t + f(x-2t)
+    \end{align*}
+    
+    The initial conditions give us
+    \begin{align*}
+        \ln u(x,0) = f(x) = 2 \ln x
+    \end{align*}
+    
+    So that our final form of the general solution is therefore
+    \begin{align*}
+        \ln u &= \alpha + f(\beta) = t + 2 \ln (x-2t) \\
+        u &= (x-2t)^2 \cdot e^t
+    \end{align*}
+    
+    \item We have the following parabolic PDE:
+    \begin{align*}
+        \phi_{xx} + 2\phi_{xy} + \phi_{yy} = 1
+    \end{align*}
+    
+    We know that the families of curves $\xi = c$ where $c$ is a constant are the characteristic curves.  Therefore, the change of variables is given by
+    \begin{align*}
+        \xi &= y - \frac{2}{2 \cdot 1}x = y - x \\
+        \eta &= x
+    \end{align*}
+    
+    And the transformed equation therefore becomes
+    \begin{align*}
+        a\phi_{\xi\xi} + b\phi_{\xi\eta} + c\phi_{\eta\eta} = 1
+    \end{align*}
+    
+    Where $(a,b,c)$ are given by
+    \begin{align*}
+        a &= A\xi_x^2 + B\xi_x\xi_y + C\xi_y^2 = 2(-1)(1) = -2 \\
+        b &= 2A\xi_x\eta_x + B(\xi_x\eta_y + \xi_y\eta_x) + 2C(\xi_y\eta_y) = 2(1)(-1) + 2 = 0 \\
+        c &= 0
+    \end{align*}
+    
+    And therefore the canonical equation is $2\phi_{\xi\xi} + 1 = 0$.  Now we solve it as follows:
+    \begin{align*}
+        \phi_{\xi\xi} &= -\frac{1}{2} \\
+        \phi_\xi &= -\frac{1}{2}\xi + c_1 + f(\eta) \\
+        \phi &= -\frac{1}{4}\xi^2 + (c_1 + f(\eta))\xi + g(\eta) + c_2 \\
+        &= -\frac{(y-x)^2}{4} + (c_1 + f(x))(y-x) + g(x) + c_2
+    \end{align*}
+    
+    \item We are given the elliptic PDE
+    \begin{align*}
+        u_{xx} - 6u_{xy} + 12u_{yy} = 0
+    \end{align*}
+    
+    And now let us find a transofmration of independent variables to convert it to the form of the Laplace's equation $\nabla^2f = 0$.
+    
+    The roots of the characteristic polynomial are given by
+    \begin{align*}
+        \lambda_{\pm} = \frac{-6 \pm \sqrt{6^2 - 48}}{2} = -3 \pm \sqrt{3^2-12} = -3\pm i\sqrt{3}
+    \end{align*}
+    
+    And therefore, we see that the characteristics of the equation are:
+    \begin{align*}
+        \frac{\dd{y}}{\dd{x}} = -3\pm i\sqrt{3} \Rightarrow y = (-3\pm i\sqrt{3})x + c
+    \end{align*}
+    
+    So we see that the two families of the characteristic curves are:
+    \begin{align*}
+        c_1 = y + (3+i\sqrt{3})x,\quad
+        c_2 = y + (3-i\sqrt{3})x
+    \end{align*}
+    
+    And therefore the required transformation variables $\xi$ and $\eta$ are
+    \begin{align*}
+        \xi  &= \frac{c_1+c_2}{2} = y + 3x \\
+        \eta &= \frac{c_1+c_2}{2i} = \sqrt{3}x
+    \end{align*}
+    
+    So the transformed equation therefore becomes
+    \begin{align*}
+        a\phi_{\xi\xi} + b\phi_{\xi\eta} + c\phi_{\eta\eta} = 0
+    \end{align*}
+    
+    Where $(a,b,c)$ are given by
+    \begin{align*}
+        a &= A\xi_x^2 + B\xi_x\xi_y + C\xi_y^2
+        = (3)^2 - 6(3) + 12 = 3 \\
+        b &= 2A\xi_x\eta_x + B(\xi_x\eta_y + \xi_y\eta_x) + 2C(\xi_y\eta_y) = 2(1)(3)(\sqrt{3}) - 6\sqrt{3} = 0 \\
+        c &= 3
+    \end{align*}
+    
+    And therefore the canonical equation is $3\phi_{\xi\xi} + 3\phi_{\eta\eta} = 0 \Rightarrow \phi_{\xi\xi} + \phi_{\eta\eta} = \nabla^2\phi =  0$ which is the Laplacian in ($\xi$,$\eta$) coordinates.
+    
+\end{enumerate}

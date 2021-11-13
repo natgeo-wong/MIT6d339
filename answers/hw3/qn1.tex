@@ -1,0 +1,45 @@
+\textbf{Problem 1.}
+
+Show that $u=1-2\abs{x-\frac{1}{2}}$ satisfies the weak statement
+\begin{align*}
+    \int_0^1 v_xu_x \dd{x} = 4v(\tfrac{1}{2})
+\end{align*}
+
+\begin{proof}
+We begin by breaking the integral into two:
+\begin{align*}
+    \int_0^1 v_xu_x \dd{x}
+    = \int_0^{\tfrac{1}{2}-\varepsilon} v_xu_x \dd{x}
+    + \int_{\tfrac{1}{2}-\varepsilon}^1 v_xu_x \dd{x}
+\end{align*}
+
+Next, let us perform integration by parts on an indefinite integral:
+\begin{align*}
+    \int v_xu_x \dd{x} &= vu_x - \int v u_{xx} \\
+    &= vu_x & \text{because $u_{xx} = 0$}
+\end{align*}
+
+Lastly, we recognise that
+\begin{align*}
+    u_x = \begin{cases}
+    -2 & x > \tfrac{1}{2} \\
+     2 & x < \tfrac{1}{2}
+    \end{cases}
+\end{align*}
+
+Understanding all this and substituting in the limits, we obtain
+\begin{align*}
+    \int_0^1 v_xu_x \dd{x}
+    &= \int_0^{\tfrac{1}{2}-\varepsilon} v_xu_x \dd{x}
+    + \int_{\tfrac{1}{2}-\varepsilon}^1 v_xu_x \dd{x} \\
+    &= [vu_x]_0^{\tfrac{1}{2}-\varepsilon} + [vu_x]_{\tfrac{1}{2}-\varepsilon}^1 \\
+    &= 2v(\tfrac{1}{2}-\varepsilon) - v(0)u_x(0)
+    + v(1)u_x(1) - (-2)v(\tfrac{1}{2}-\varepsilon) \\
+    &= 4v(\tfrac{1}{2}-\varepsilon) + v(1)u_x(1) - v(0)u_x(0)
+\end{align*}
+
+And given Dirichlet boundary conditions such that $v(1) = v(0) = 0$, we have that since $\varepsilon\rightarrow0$
+\begin{align*}
+    \int_0^1 v_xu_x \dd{x} = 4v(\tfrac{1}{2})
+\end{align*}
+\end{proof}

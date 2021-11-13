@@ -1,0 +1,80 @@
+\textbf{Problem 4.}
+
+We consider the fourth-order 1-D problem of \textbf{Problem 3}, but this time, with different boundary conditions:
+\begin{alignat}{2}
+    u_{xxxx} &= f \qquad&& \text{in $\Omega = (0,1)$} \\
+    u(0) = u(1) &= 0 \\
+    u_{xx}(0) = u_{xx}(1) &= 0
+\end{alignat}
+
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=0mm]
+
+    \item \begin{proof} Let us find the SPD bilinear form $a$ over $X$ and a linear form $l$ such that
+    \begin{gather*}
+        u = \arg\min_{w\in X}J(w) = \frac{1}{2}a(w,w) - l(w) \\
+        \Updownarrow \\
+        a(u,v) = l(v), \qquad \forall\>v\in X
+    \end{gather*}
+    
+    where $w\in X$ are sufficiently smooth and satisfy $w(0) = w(1) = w_{xx}(0) = w_{xx}(1) = 0$.
+    
+    We start by multiplying the strong form by $v$ and integrating by parts with the indefinite integral, which gives us
+    \begin{align}
+        \int u_{xxxx} v \dd{x} &= u_{xxx}v - \int u_{xxx}v_x \nonumber \\
+        &= u_{xxx}v - \left( u_{xx}v_x - \int u_{xx}v_{xx} \dd{x} \right) = \int fv \dd{x}
+    \end{align}
+    
+    Converting to a definite integral and applying the boundary conditions to $v$ such that $v(1) = v(0) = 0$, noting that here we already have $u_{xx}(0) = u_{xx}(1) = 0$ so it is unnecessary to hold $v_x(0) = v_x(1) = 0$,
+    \begin{align}
+        \int_0^1 u_{xxxx} v \dd{x}
+        &= \left[ u_{xxx}v - \left( u_{xx}v_x - \int u_{xx}v_{xx} \dd{x} \right) \right]_0^1 \nonumber \\
+        &= \int_0^1 u_{xx}v_{xx} \dd{x} + [u_{xxx}v-u_{xx}v_x]_0^1 \nonumber \\
+        &= \int_0^1 u_{xx}v_{xx} \dd{x} = \int_0^1 fv \dd{x}
+    \end{align}
+    
+    which is the weak form.  We note that although $u_{xx}(0) = u_{xx}(1) = 0$, the integral might not be and therefore that the result is the same, with only the domain $X$ changing.  Therefore, we see that the SPD bilinear form $a$ and linear form $l$ are
+    \begin{align}
+        a(u,v) = \int u_{xx}v_{xx} \dd{x}, \qquad l(v) = \int fv \dd{x}
+    \end{align}
+    
+    The next step is to prove that $J(w) = \frac{1}{2}a(w,w) - l(w)$ is still valid for these set of equations.  We let $w = u + v$, where $u$ is $v$ such that $J$ is a minimum.  Let us assume that $J(w) = \frac{1}{2}a(w,w) - l(w)$ is indeed the minimization factor, and by induction we have that
+    \begin{alignat}{2}
+        J(u+v) &= \frac{1}{2}\int_\Omega (u+v)_{xx} \cdot (u+v)_{xx} \dd{A} - \int_\Omega f (u+v) \dd{A} \nonumber \\
+        &= \frac{1}{2} \left( \int_\Omega u_{xx}u_{xx} + 2u_{xx}v_{xx} + v_{xx} \dd{A} \right)
+        - \int_\Omega fu + fv \dd{A} \nonumber \\
+        &= \frac{1}{2} \int_\Omega u_{xx}u_{xx} \dd{A} - \int_\Omega fu \dd{A} &&\qquad J(u) \nonumber \\
+        &\quad + \int_\Omega u_{xx}v_{xx} \dd{A} - \int_\Omega fv \dd{A} &&\qquad \delta_vJ(u) \nonumber \\
+        &\quad + \frac{1}{2}\int_\Omega v_{xx}v_{xx} \dd{A}
+    \end{alignat}
+    
+    The last term, $\frac{1}{2}\int_\Omega v_{xx}v_{xx} \dd{A} = \frac{1}{2}\int_\Omega v_{xx}^2 \dd{A} > 0$, so we need to prove that $\delta_vJ(u) \geq 0$ to show that for some $u$ which minimizes $J$, $J(u+v) > J(u)$.  Using integration by parts, we have
+    \begin{align*}
+        \delta_vJ(u) &= \int_\Omega u_{xx}v_{xx} \dd{A} - \int_\Omega fv \dd{A} \\
+        &= [v_xu_{xx}]_0^1 - \int_\Omega v_xu_{xxx} \dd{A} - \int_\Omega fv \dd{A} \\
+        &= [v_xu_{xx}]_0^1 - [vu_{xxx}]_0^1 + \int_\Omega vu_{xxxx} \dd{A} - \int_\Omega fv \dd{A} \\
+        &= [v_xu_{xx}]_0^1 - [vu_{xxx}]_0^1 + \int_\Omega v (u_{xxxx}-f) \dd{A}
+    \end{align*}
+    
+    Given that we have $u_{xx}(0) = u_{xx}(1) = 0$, $v(0) = v(1) = 0$, and $u_{xxxx} - f = 0$
+    \begin{align*}
+        \delta_vJ(u) &= 0 \\
+        \therefore J(u+v) &= J(u) + \frac{1}{2}\int_\Omega v_{xx}v_{xx} \dd{A} \geq J(u), \qquad
+        \forall \> v \in H^2(\Omega)
+    \end{align*}
+    
+    Therefore $J(w) = \frac{1}{2}a(w,w) - l(w)$ is indeed the functional form that gives the minimum, so the minimization statement is given by
+    
+    \begin{gather*}
+        u = \arg\min_{w\in X}\left( \frac{1}{2}\int w_{xx}^2 \dd{x} - \int fw \dd{x} \right) \\
+        X = \{ v\in H^2(\Omega) \mid v(0) = v(1) = 0, \> x \in (0,1) \}
+    \end{gather*}
+    
+    \end{proof}
+    
+    \item We have that
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $u(0) = u(1) = 0$ is an \textit{essential} boundary condition
+        \item $u_{xx}(0) = u_{xx}(1) = 0$ is a \textit{natural} boundary condition
+    \end{itemize}
+    
+\end{enumerate}

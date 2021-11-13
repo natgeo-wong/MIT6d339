@@ -1,0 +1,144 @@
+\textbf{Problem 2.  Iterative Methods: Jacobi, G-S, Multigrid}
+
+We wish to solve the Poisson equation:
+\begin{align}
+    -\nabla^2\phi(x,y) = f
+\end{align}
+
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=0mm]
+    
+    \item The matrix forms of the Jacobi and Gauss-Siedel iterations are, respectively:
+    \begin{align}
+        \mathbf{u}^{r+1} &= (I-D^{-1}A)\mathbf{u}^r + D^{-1}f \\
+        \mathbf{u}^{r+1} &= (D-L)^{-1}U\mathbf{u}^r + (D-L)^{-1}f
+    \end{align}
+    
+    Discretization of the Poisson equation gives us:
+    \begin{align}
+        \nabla^2\phi(x,y) &= \frac{\partial^2\phi}{\partial{x^2}} + \frac{\partial^2\phi}{\partial{y^2}} \nonumber \\
+        &= \frac{\phi_{i+1,j}+\phi_{i-1,j}-2\phi_{i,j}}{\Delta x^2}
+        + \frac{\phi_{i,j+1}+\phi_{i,j-1}-2\phi_{i,j}}{\Delta y^2}
+    \end{align}
+    
+    Given that we have $N^2$ nodes on the computational grid, where $N = 6n + 1 \> \forall \> n\in \mathbb{N}$.  Therefore, representing the nodes of the computational grid by $(i,j)$, we have that the for a given $(i,j)$ computational node, where $2 \leq i,j \leq N-1$, the elements of $A$ are, where $k = i + (j-1)N$
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $a_{k,k} = 4$
+        \item $a_{k,k-1} = a_{k,k+1} = a_{k,k-N} = a_{k,k+N} = -1$
+    \end{itemize}
+    
+    When $i=1$ or $i = N$ or $j = 1$ or $j = N$, the elements of $A$ are, where $k = i + (j-1)N$
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $a_{k,k} = 1$
+    \end{itemize}
+    
+    The elements of $D$ are
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $d_{k,k} = \dfrac{2}{(\Delta x)^2} + \dfrac{2}{(\Delta y)^2}$
+    \end{itemize}
+    
+    The elements of $L$ are
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $l_{k,k-1} = l_{k,k-N} = \dfrac{1}{(\Delta x)^2}$
+    \end{itemize}
+    
+    The elements of $U$ are
+    \begin{itemize}[noitemsep,nolistsep]
+        \item $u_{k,k+1} = u_{k,k+N} = \dfrac{1}{(\Delta x)^2}$
+    \end{itemize}
+    
+    The elements of $f$ are determined by the location of the source blocks (which have 16 possible positions).  Given a source block at position $s = s_1 + 4(s_2-1) \>\forall\> 1 \leq s_1,s_2 \leq 4$ out 16, the following points $f_{i+(j-1)N}$ are set to 1, where $i,j$ are given by
+    \begin{itemize}
+        \item $ns_1 + 1 \leq j \leq n(s_1+1) + 1$
+        \item $ns_2 + 1 \leq i \leq n(s_2+1) + 1$
+    \end{itemize}
+    
+    where $n$, as given above, is defined by $N = 6n + 1 \> \forall \> n\in \mathbb{N}$ given that the computational grid is for $N^2$ nodes.
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/prj1_qn2_solutions.png}\\
+    \caption{We plot here the spatial distribution for $\phi$ derived from (a) the reference solution generated from directly solving the equation $A\mathbf{u} = f$; (b-d) using the Jacobi-iterative solver; (e-g) using the Gauss-Seidel iterative solver, for different relaxation factors (b,e) $\omega=1.5$, (c,f) $\omega=1.0$ and (d,g) $\omega=0.3$.  We see that as $\omega$ increases, the speed at which the solutions converge increase.  However, as can be seen in (b) an over-relaxation of the Jacobi iterative method causes a failure of convergence and the solution blows up.}
+    \label{prj1_qn2_sol}
+    \end{figure*}
+    
+    \item We first implement the relaxation scheme using the variable $\omega$.  For the Jacobi, this means transforming Eq. (30) to:
+    \begin{align}
+        \mathbf{u}^{r+1} &= \omega((I-D^{-1}A)\mathbf{u}^r + D^{-1}f) + (1-\omega) \mathbf{u}^r
+    \end{align}
+    
+    And for the Gauss-Seidel, this means transforming Eq. (31) to
+    \begin{align}
+        \mathbf{u}^{r+1} &= \omega((D-L)^{-1}U\mathbf{u}^r + (D-L)^{-1}f) + (1-\omega)\mathbf{u}^r
+    \end{align}
+    
+    We then plot, for different values of relaxation factor $\omega$, the spatial distribution of $\phi$ at iteration 200 (Fig. \ref{prj1_qn2_sol}) and the convergence of the Jacobi and G-S solvers (Fig. \ref{prj1_qn2b_converge}).  Our initial condition is to set $\phi=0$ throughout the domain, which is $(x,y) \in [0,1]$.
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/prj1_qn2b_converge.png}\\
+    \caption{The $L_2$ norm of $\phi$ for the (a) Jacobi and (b) Gauss-Seidel iteration as a function of the number of iterations for different relaxation factors $\omega$, where $\omega \in (0,1]$ for the Jacobi and $\omega\in(0,2]$ for the Gauss-Seidel methods.}
+    \label{prj1_qn2b_converge}
+    \end{figure*}
+    
+    For the Jacobi iterative method, we see that $\omega = 1$ is the most optimal method for convergence.  However, for the Gauss-Seidel method, things become a bit more complicated.  Although theoretically $\omega$ can go to 2 for the Gauss-Seidel iterative method, we see that this is practically not the case most of the time.  Here, we see that for $\omega \gtrapprox 1.7$, $L_2$ begins to show instability as it converges, with $L_2$ blowing up as $\omega \rightarrow 2$.
+    
+    We see therefore that the optimal relaxation factor is $\omega \approx 1.7 \pm 0.1$.  Next, we output the gradient at iteration 750 of $N=25$ for $\omega=1.7$.
+    
+    \input{answers/project1/qn2_grad}
+    
+    Which is what was given, except to even higher significant figures.
+    
+    \item We first test our restriction and prolongation matrices to determine if they are correct (Fig. \ref{prj1_qn2c_testrestrictprolong}).
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/prj1_qn2c_testrestrictprolong.png}\\
+    \caption{We test the relaxation and prolongation matrices we constructed by plotting (a) the initial solution, and the (b) restricted and (c) prolongated solutions found by multiplying the initial solution against these matrices.}
+    \label{prj1_qn2c_testrestrictprolong}
+    \end{figure*}
+    
+    There is functionally no difference in our results for the initial $\phi$ and the prolonged $\phi_p$ due to the fact that the interpolation between the points is linear.  However, we do see the effects of the restriction matrix on the restricted solution $\phi_r$, which is of obviously lower resolution and cannot capture some of the high points in our initial solution (i.e. the absolute maximum caused around source block 7).
+    
+    From there, we coded up a 2-grid Multi-Grid method.  We first test with $\nu_1=\nu_2=1$ and $\nu_c=2$, and compare the rate of convergence using different combinations of the Gauss-Seidel, Jacobi and both methodologies for restriction, prolongation, and coarse-iterations (Fig. \ref{prj1_qn2c_pt1})
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/prj1_qn2c_pt1.png}\\
+    \caption{The $L_2$ norm of $\phi$ for the different combinations of the Gauss-Seidel and Jacobi methods.  The order is given in Restriction-Prolongation-Coarse, with "G" representing Gauss-Seidel and "J" representing Jacobi iterative methods respectively.  Blue represents $\omega = 0.5$ and red represents $\omega = 0.8$ relaxation factors respectively.}
+    \label{prj1_qn2c_pt1}
+    \end{figure*}
+    
+    We see that the Gauss-Seidel method causes a faster convergence than the Jacobi method when it is used in the relaxation of $\nu_1$ and $\nu_2$ methods.  This is particularly obvious when the relaxation factor $\omega$ is small.  Whether Gauss-Seidel or Jacobi methods are used in the iteration of the coarse grid does not seem to make any significant difference in the convergence rate.  Obviously, we see that higher relaxation factors are better for the multigrid routine.
+    
+    Next, we proceed to vary $\nu_c$, or the number of coarse-grid iterations, in our multigrid.  We do $\nu_c = 2,4,10,20,50$ and an exact solution which is derived from a direct solve of the matrix equation $A\mathbf{e}=r$ on the coarse grid (Fig. \ref{prj1_qn2c_pt2}).  As $\nu_c$ increases, we see that $\phi$ converges to the exact solution found from the direct solve much faster.  In fact, at $\nu_c = 50$, we see that $\phi$ converges within 10 iterations when $\omega = 0.8$.
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/prj1_qn2c_pt2.png}\\
+    \caption{The $L_2$ norm of $\phi$ for the different combinations of the Gauss-Seidel and Jacobi methods.  The order is given in Restriction-Prolongation-Coarse, with "G" representing Gauss-Seidel and "J" representing Jacobi iterative methods respectively.  Blue represents $\omega = 0.5$ and red represents $\omega = 0.8$ relaxation factors respectively.}
+    \label{prj1_qn2c_pt2}
+    \end{figure*}
+    
+    \item Using $\nu_1=\nu_2 = 1$, $\nu_c=50$, we iterate over all the possible configurations of the source blocks, and find that the configuration is [1,6,11,14].  We see the table below for the fluxes we solved, and Fig. \ref{prj1_qn2d} for the distribution of $\phi$ resulting from this configuration.
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{figures/prj1_qn2d.png}\\
+    \caption{The spatial distribution of $\phi$ where $\partial_n\phi$ matches the unknown flux boundaries in the question.  The source blocks are [1,6,11,14].}
+    \label{prj1_qn2d}
+    \end{figure*}
+    
+    \input{answers/project1/qn2_unknownflux}
+    
+    \item Lastly, we generalize a V-cycle multigrid routine which allows for multiple grid refinements.  Since a 4-grid refinement is technically not possible for a 25-node grid (it can only go down two levels to 13 and 7 while keeping resolution for 6 source blocks), we start with a 49-node grid.  We take $\nu_1=\nu_2 = 1,2$, $\nu_c=2,5,10$.  We vary $\nu_n$, or the number of refinements, from 2-4, and plot our results in Fig. \ref{prj1_qn2e}.
+    
+    We see that higher $\nu_n$ results in a faster convergence.  However, we also see that as $n\nu_n$ increases, the likelihood of instability also increases and requires more relaxation iterations $\nu_1$ and/or $\nu_2$ for smoothing.
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/prj1_qn2e.png}\\
+    \caption{The $L_2$ norm of $\phi$ over 250 cycles for $\nu_n = 2,3,4$ for (top) $\nu_1=\nu_2=1$, (bottom) $\nu_1=\nu_2=2$ and (left) $\nu_c=2$, (center) $\nu_c=5$, (right) $\nu_c=10$.  We see that higher $\nu_n$ requires higher $\nu_1$, $\nu_2$ for better smoothing to prevent instability as the cycles progress.}
+    \label{prj1_qn2e}
+    \end{figure*}
+    
+\end{enumerate}

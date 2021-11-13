@@ -1,0 +1,171 @@
+\textbf{Problem 5.}
+
+We consider a linear finite element discretization of the Neumann problem: Find $u$ such that
+\begin{alignat}{2}
+    -u_{xx} &= f \qquad&& \text{in $\Omega=(0,1)$} \\
+    u(0)    &= 0 \\
+    u_x(1)  &= g
+\end{alignat}
+
+for a given $f,g$ on a triangulation $\mathcal{T}_h$ of equi-sized elements $T_h^k$, $k=1,\dots,K = n$; the corresponding $n+1$ nodes are given by $x_0=0,\dots, x_n = 1$
+
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=0mm]
+    
+    \item We first define $X_h$ and the associated nodal basis.  To do that we find the weak form of the PDE:
+    \begin{gather*}
+        a(u,v) = l(v), \qquad \forall\>v\in X
+    \end{gather*}
+    
+    Multiply (27) by $v$ and performing integration by parts, we get
+    \begin{align*}
+        \int_0^1 -vu_{xx} \dd{x} &= \int_0^1 fv \dd{x} \\
+        &= [-vu_x]_0^1 + \int_0^1 v_xu_x \dd{x}
+    \end{align*}
+    
+    So, by applying the boundary condition that $v(0)=0$, we see that
+    \begin{align*}
+        \int_0^1 v_xu_x \dd{x}
+        &= [vu_x]_0^1 + \int_0^1 fv \dd{x} \\
+        &= g\cdot v(1) + \int_0^1 fv \dd{x}
+    \end{align*}
+    
+    Which therefore gives us the bilinear and linear functions:
+    \begin{align}
+        a(w,w) = \int_\Omega w_x^2\dd{x}, \qquad
+        l(w) = \int_0^1 fw \dd{x} + g\cdot w(1)
+    \end{align}
+    
+    Where $X = \{v\in H^1(\Omega) \mid v(0) = 0\}$.  And since $X \subset H^1(\Omega)$, only the 1st derivative integrals need to be bounded, and therefore
+    \begin{align}
+        X_h = \{ v\in X \mid v|_{T_h^k} \in \mathbb{P}^1(T_h^k), \> k = 1, \dots, n\}
+    \end{align}
+    
+    We define a nodal basis, similar to the one in the notes, such that $\phi_i$, such that at $x_j$, where $i,j = 1, \dots, n$
+    \begin{align}
+        \phi_i(x_j) = \begin{cases}
+        1, & \text{for $i=j$} \\
+        0, & \text{for $i\neq j$}
+        \end{cases}
+    \end{align}
+    
+    \item We see that $\forall\> v \in X_h$
+    \begin{align}
+        v = \sum_i v_i\phi_i(x),\quad
+        u_h = \sum_j u_{h,j} \phi_j(x)
+    \end{align}
+    
+    And from the weak form, we have that
+    \begin{align}
+        a(u,v) = a\left(\sum_j u_{h,j} \phi_j(x),\sum_i v_i\phi_i(x)\right)
+        = l \left(\sum_i v_i\phi_i(x)\right) = l(v)
+    \end{align}
+    
+    So by the properties of bilinearity and linearity, we have that
+    \begin{align}
+        \sum_{j=1}^n \sum_{i=1}^n v_i \cdot a(\phi_i,\phi_j) \cdot u_{h,j}
+        = \sum_{i=1}^n v_i \cdot l(\phi_i)
+    \end{align}
+    
+    As defined earlier, we have that $v_i = (0,...,1,...,0)$, where 1 occurs at the $i$-th element, so we have that the $i$-th row in the system of linear equations is defined by
+    \begin{gather}
+        \sum_j^n A_{h|i,j} \cdot u_{h|j} = F_{h|j} \Rightarrow A_h u_h = F_h \\
+        A_h \in \mathbb{R}^{n\times n}, \quad
+        u_h \in \mathbb{R}^{n}, \quad
+        F_h \in \mathbb{R}^{n}
+    \end{gather}
+    
+    where $A_{h|i,j} = a(\phi_i,\phi_j)$ and $F_{h,i} = l(\phi_i)$.
+    
+    Given that
+    \begin{align}
+        a(\phi_i,\phi_j) &= \int_\Omega \partial_x\phi_i \cdot \partial_x\phi_j \dd{x} \nonumber \\
+        &= \int_{T_h^i} \partial_x\phi_i \cdot \partial_x\phi_j \dd{x}
+        + \int_{T_h^{i+1}} \partial_x\phi_i \cdot \partial_x\phi_j \dd{x} \nonumber \\
+        &= \partial_x\phi_i|_{x_i} \cdot \partial_x\phi_j|_{x_i} \cdot (x_i-x_{i-1})
+        + \partial_x\phi_i|_{x_{i+1}} \cdot \partial_x\phi_j|_{x_{i+1}} \cdot (x_{i+1}-x_i) \nonumber \\\
+        &= h \cdot ( \partial_x\phi_i|_{x_i} \cdot \partial_x\phi_j|_{x_i}
+        + \partial_x\phi_i|_{x_{i+1}} \cdot \partial_x\phi_j|_{x_{i+1}} ) \\
+        l(\phi_i) &= \int_\Omega f\cdot\phi_i \dd{x} + g\cdot \phi_i(1) \nonumber \\
+        &= \int_{T_h^i} f\cdot\phi_i \dd{x} + \int_{T_h^{i+1}} f\cdot\phi_i \dd{x} + g\cdot \phi_i(1) \nonumber \\
+        &= \begin{cases}
+        \int_{T_h^i} f\cdot\phi_i \dd{x} + \int_{T_h^{i+1}} f\cdot\phi_i \dd{x} & i \neq n\\
+        \int_{T_h^i} f\cdot\phi_n \dd{x} + g\cdot \phi_i(1) & i = n
+        \end{cases}
+    \end{align}
+    \newpage
+    There are basically three cases:
+    \begin{itemize}
+        \item \textit{Case 1:} The interior points/nodes, which are basically the same as what was given in the notes, so we have that
+        \begin{align*}
+            A_{h|i,i} &= \left(\frac{1}{h}\right)^2 \cdot h
+            + \left(-\frac{1}{h}\right)^2 \cdot h
+            = \frac{2}{h}\\
+            A_{h|i,i-1} &= \frac{1}{h} \cdot \left(-\frac{1}{h}\right) \cdot h
+            + \left(-\frac{1}{h}\right) \cdot 0 \cdot h
+            = -\frac{1}{h} \\
+            A_{h|i,i+1} &= \frac{1}{h} \cdot 0 \cdot h
+            + \left(-\frac{1}{h}\right) \cdot \frac{1}{h} \cdot h
+            = -\frac{1}{h} \\
+            F_{h,i} &= l(\phi_i) = \int_{T_h^i} f\cdot\phi_i \dd{x} + \int_{T_h^{i+1}} f\cdot\phi_i \dd{x}
+        \end{align*}
+        
+        Therefore the final equation for interior rows become
+        \begin{align}
+            \frac{2u_{h|i}-u_{h|i+1}-u_{h|i-1}}{h}
+            = \int_{T_h^i} f\cdot\phi_i \dd{x} + \int_{T_h^{i+1}} f\cdot\phi_i \dd{x}
+        \end{align}
+        
+        \item \textit{Case 2:} The leftmost bound $i=1$, where we have
+        \begin{align*}
+            A_{h|1,1} &= \left(\frac{1}{h}\right)^2 \cdot h
+            + \left(-\frac{1}{h}\right)^2 \cdot h
+            = \frac{2}{h}\\
+            A_{h|1,2} &= \frac{1}{h} \cdot 0 \cdot h
+            + \left(-\frac{1}{h}\right) \cdot \frac{1}{h} \cdot h
+            = -\frac{1}{h} \\
+            F_{h,1} &= l(\phi_1) = \int_{T_h^1} f\cdot\phi_1 \dd{x} + \int_{T_h^2} f\cdot\phi_1 \dd{x}
+        \end{align*}
+        
+        Therefore the final equation for first row becomes
+        \begin{align}
+            \frac{2u_{h|1}-u_{h|2}}{h}
+            = \int_{T_h^1} f\cdot\phi_1 \dd{x} + \int_{T_h^2} f\cdot\phi_1 \dd{x}
+        \end{align}
+        
+        \item \textit{Case 3:} The rightmost bound $i=n$, where we have that $\partial_x\phi_{n+1}$ does not exist such that
+        \begin{align*}
+            A_{h|n,n} &= \left(\frac{1}{h}\right)^2 \cdot h = \frac{1}{h}\\
+            A_{h|n,n-1} &= \frac{1}{h} \cdot \left(-\frac{1}{h}\right) \cdot h = -\frac{1}{h}\\
+            F_{h,n} &= \int_{T_h^n} f\cdot\phi_n \dd{x} + g\cdot \phi_n(1)
+            = \int_{T_h^n} f\cdot\phi_n \dd{x} + g
+        \end{align*}
+        
+        Therefore the final equation for final row becomes
+        \begin{align}
+            \frac{u_{h|n}-u_{h|n-1}}{h}
+            = \int_{T_h^n} f\cdot\phi_n \dd{x} + g
+        \end{align}
+        
+    \end{itemize}
+    
+    \item In finite difference, at the $n$-th equation, we supply a $n+1$ ghost node such that
+    \begin{align*}
+        \frac{u_{n+1} - u_{n-1}}{2h} = g
+    \end{align*}
+    
+    Recognizing that the 2nd derivative is given by
+    \begin{align*}
+        \frac{2u_n-u_{n+1}-u_{n-1}}{h^2} = f_n
+    \end{align*}
+    
+    We obtain by combining the two:
+    \begin{align*}
+        \frac{2u_n-(u_{n+1}-u_{n-1})-2u_{n-1}}{h^2} = \frac{2u_n-2gh-2u_{n-1}}{h^2} = f_n
+    \end{align*}
+    
+    Therefore,
+    \begin{align*}
+        \frac{u_n-u_{n-1}}{h^2} = \frac{f_n}{2} + \frac{g}{h} \Rightarrow \frac{u_n-u_{n-1}}{h} = \frac{f_nh}{2} + g
+    \end{align*}
+    
+\end{enumerate}
