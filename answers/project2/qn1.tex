@@ -289,6 +289,65 @@
         
     \end{itemize}
     
-    \item 
+    \newpage
+    
+    \item We code up the finite-element solver that takes the configuration $\underline{\mu}$ and triangulation $\mathcal{T}_h$ to calculate $u_h(\underline{\mu})$ and $T_{\text{root}.h}$.  We use the default configuation $\underline{\mu} = \{k_1,k_2,k_3,k_4,\text{Bi}\} = \{0.4,0.6,0.8,1.2,0.1\}$, and plot our solution in Fig. \ref{prj2_qn1_control}a.  Using a trapezoidal summation method, we calculate $T_\text{root}= 1.7342$.
+
+    \begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/prj2_qn1_control.png}\\
+    \caption{}
+    \label{prj2_qn1_control}
+    \end{figure*}
+    
+    \item We wish to show that
+    \begin{align}
+        T_\text{root}(\underline{\mu}) - T_{\text{root},h}(\underline{\mu})
+        = a(e(\underline{\mu}), e(\underline{\mu}))
+    \end{align}
+    
+    where
+    \begin{align*}
+        e(\underline{\mu}) &= u(\underline{\mu}) - u_h(\underline{\mu}) \\
+        T_\text{root}(\underline{\mu}) &= \int_{\Gamma_\text{root}} u \dd{S} \\
+        T_{\text{root},h}(\underline{\mu}) &= L_h^T u_h(\underline{\mu})
+    \end{align*}
+    
+    We are given that $l(v) = l^0(v)$
+    \begin{align*}
+        \therefore T_\text{root}(\underline{\mu}) - T_{\text{root},h}(\underline{\mu})
+        &= l^0(u(\underline{\mu})) - l^0(u_h(\underline{\mu})) \\
+        &= l(u(\underline{\mu})-u_h(\underline{\mu}))
+    \end{align*}
+    
+    The weak form gives us
+    \begin{align*}
+        a(u,v) &= l(v), \quad \forall\> v \in X \\
+        a(u_h,v') &= l(v'), \quad \forall\> v' \in X_h
+    \end{align*}
+    
+    Let $v = u$ and $v' = u_h$, such that the equations are transformed into
+    \begin{gather*}
+        a(u,u) = l(u), \quad a(u_h,u_h) = l(u_h)
+    \end{gather*}
+    
+    Using bilinearity and linearity, we obtain
+    \begin{align*}
+        a(u-u_h,u-u_h) &= l(u-u_h) = T_\text{root}(\underline{\mu}) - T_{\text{root},h}(\underline{\mu}) \\
+        \therefore T_\text{root}(\underline{\mu}) - T_{\text{root},h}(\underline{\mu})
+        &= a(u-u_h,u-u_h) = a(e(\underline{\mu}), e(\underline{\mu}))
+    \end{align*}
+    
+    Next, we wish to find the convergence of the solution.  Using the coarse, medium and fine grids respectively, we find $T_{\text{root},h} = 1.731266$, 1.734163 and 1.734976.
+    
+    We use the equation given, that
+    \begin{align*}
+        T_{\text{root},\text{fine}} - T_{\text{root},\text{medium}} &= C (2h_\text{fine})^b \\
+        T_{\text{root},\text{fine}} - T_{\text{root},\text{coarse}} &= C (4h_\text{fine})^b \\
+        \therefore \log(\frac{T_{\text{root},\text{fine}} - T_{\text{root},\text{medium}}}{T_{\text{root},\text{fine}} - T_{\text{root},\text{coarse}}}) &= b\log(\frac{1}{2}) \\
+        \therefore b &= 2.189
+    \end{align*}
+    
+    And therefore we see that the convergence is 2nd order, as shown in Fig. \ref{prj2_qn1_control}b.
     
 \end{enumerate}
