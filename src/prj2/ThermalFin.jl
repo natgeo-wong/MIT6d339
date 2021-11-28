@@ -19,7 +19,7 @@ function ThermalFin(mesh, mu)
     
     # Parameters setup: rearranges the values in mu
     kappa = ones(6)
-    kappa[1:4] = mu[1:4]
+    kappa[1:4] .= mu[1:4]
     kappa[6] = mu[5]
 
     nnodes = Int.(mesh["nodes"])
@@ -27,6 +27,7 @@ function ThermalFin(mesh, mu)
     # Initialization
     A = spzeros(nnodes,nnodes)
     F = zeros(nnodes)
+    L = zeros(1,nnodes)
     A3by3 = zeros(3,3)
     A2by2 = ones(2,2) + I(2)
     x3by3 = ones(3,3)
@@ -81,17 +82,15 @@ function ThermalFin(mesh, mu)
 
         for ii = 1 : 2
             F[phi[ii]] = F[phi[ii]] + xyL2 / 2
+            L[phi[ii]] = L[phi[ii]] + 0.5 * xyL2
         end
     end
     
     
     # Solve for the temperature distribution
     u = A \ F
-    
-    
-    # # Compute the temperature at the root
-    # ...
+    Troot = L * u
 
-    return u#, Troot
+    return u, Troot[1]
     
 end

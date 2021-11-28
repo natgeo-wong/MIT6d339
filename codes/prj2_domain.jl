@@ -37,7 +37,7 @@ for imesh = 1 : 2
     for ii = 1 : nΩ0; axs[imesh].plot(x[Ω0[ii,rot]],y[Ω0[ii,rot]],lw=0.5,c="gray7") end
     for ii = 1 : nΓe; axs[imesh].plot(x[Γe[ii,:]],y[Γe[ii,:]],c="k") end
                       axs[imesh].plot([-4,4],[0,0],c="brown")
-    for ii = 1 : nΓr; axs[imesh].plot(x[Γr[ii,:]],y[Γr[ii,:]],c="r",linewidth=3) end
+    for ii = 1 : nΓr; axs[imesh].plot(x[Γr[ii,:]],y[Γr[ii,:]],c="r") end
 
     axs[imesh].format(xlim=(-4,4),ylim=(-0.2,4.8),suptitle="Finite Element Grid")
 
