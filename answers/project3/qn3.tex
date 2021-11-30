@@ -1,0 +1,21 @@
+\textbf{Problem 3: Nyström beyond a circle}
+
+We develop an approach to solve the exterior Neumann problem using the equally-spaced-point Nyström method, but for the case where the boundary, $\Gamma$, is an ellipse:
+\begin{align}
+    \frac{x^2}{4}+ y^2 = 1
+\end{align}
+
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=0mm]
+    
+    \item The function that maps from $\theta\in[0,2\pi]$ to $x,y\in\Gamma$ is
+    \begin{align}
+        g(\theta) = 4\cos^2\theta + \sin^2\theta
+    \end{align}
+    
+    \item We change the line-integral over the ellipse to an integral with respect to $\theta$:
+    \begin{align}
+        \int_\Gamma \dd{S} = \int 2\sin\theta\cos\theta-8\cos\theta\sin\theta \dd{\theta}
+        = -6 \int\sin\theta\cos\theta\dd{\theta}
+    \end{align}
+    
+\end{enumerate}
